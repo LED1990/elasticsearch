@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<configuration>
+    <include resource="org/springframework/boot/logging/logback/base.xml"/>
+    <!--<logger name="org.springframework.web" level="INFO"/>-->
+
+    <property name="APP_CODE" value="elastic"/>
+    <property name="LOG_PATH" value="logs"></property>
+
+    <appender name="ROLLING-FILE" class="ch.qos.logback.core.rolling.RollingFileAppender">
+        <encoder>
+            <pattern>%d{yyyy-MM-dd HH:mm:ss.SSS}:${HOSTNAME}:%X{uuidZadaniaInicjujacego} %-5level %X{PID} ---
+                %logger{36} : %msg%n
+            </pattern>
+        </encoder>
+        <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+            <fileNamePattern>${LOG_PATH}/${APP_CODE}_%d{yyyyMMdd}.%i.log</fileNamePattern>
+            <timeBasedFileNamingAndTriggeringPolicy class="ch.qos.logback.core.rolling.SizeAndTimeBasedFNATP">
+                <maxFileSize>100MB</maxFileSize>
+            </timeBasedFileNamingAndTriggeringPolicy>
+        </rollingPolicy>
+    </appender>
+
+
+    <logger name="com.elastic.Elasticsearch" level="INFO"
+            additivity="false">
+        <appender-ref ref="ROLLING-FILE"/>
+        <appender-ref ref="CONSOLE"/>
+    </logger>
+    <root level="INFO">
+        <appender-ref ref="ROLLING-FILE"/>
+        <appender-ref ref="CONSOLE"/>
+    </root>
+</configuration>
